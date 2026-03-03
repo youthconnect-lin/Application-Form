@@ -73,6 +73,8 @@
 
 html {
   font-size: clamp(15px, 1vw + 0.5rem, 18px);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 html,
@@ -1793,11 +1795,11 @@ label,
   .subsection-card,
   .language-block,
   .review-group {
-    padding: 18px;
+    padding: 14px;
   }
 
   .wizard-top {
-    padding-inline: 18px;
+    padding-inline: 14px;
   }
 
   .panel,
@@ -1868,16 +1870,16 @@ label,
   }
 
   .mode-choice-card {
-    min-height: 162px;
-    padding: 18px 15px;
+    min-height: 148px;
+    padding: 14px 13px;
   }
 
   .mode-choice-card[data-mode="online"] {
-    min-height: 176px;
+    min-height: 160px;
   }
 
   .mode-choice-card[data-mode="pdf"] {
-    min-height: 160px;
+    min-height: 146px;
   }
 
   .welcome-intro-center,
@@ -1886,22 +1888,22 @@ label,
   }
 
   .title {
-    font-size: clamp(26px, 7vw, 34px);
+    font-size: clamp(22px, 6vw, 28px);
     line-height: 1.2;
   }
 
   .page-title {
-    font-size: clamp(22px, 5.9vw, 29px);
+    font-size: clamp(18px, 5vw, 24px);
     line-height: 1.26;
   }
 
   .section-title {
-    font-size: clamp(21px, 5.5vw, 27px);
+    font-size: clamp(17px, 4.8vw, 22px);
     line-height: 1.32;
   }
 
   .subtitle {
-    font-size: clamp(14px, 3.8vw, 17px);
+    font-size: clamp(13px, 3.6vw, 15px);
   }
 
   .note,
@@ -1912,8 +1914,8 @@ label,
   .review-value,
   .eligibility-result .result-copy,
   .success-card p {
-    font-size: clamp(16px, 4.6vw, 20px);
-    line-height: 1.62;
+    font-size: clamp(14px, 3.9vw, 16px);
+    line-height: 1.54;
   }
 
   /* Mobile Burmese safety: more vertical space and no border clipping. */
@@ -1924,9 +1926,9 @@ label,
   [lang^="my-"],
   :lang(my),
   :lang(my-MM) {
-    line-height: 1.84;
-    padding-top: 0.06em;
-    padding-bottom: 0.1em;
+    line-height: 1.76;
+    padding-top: 0.04em;
+    padding-bottom: 0.07em;
   }
 
   .subtitle,
@@ -1937,8 +1939,8 @@ label,
   .pdf-copy,
   .eligibility-result .result-copy,
   .review-confirm span {
-    line-height: 1.68;
-    padding-bottom: 0.08em;
+    line-height: 1.56;
+    padding-bottom: 0.04em;
   }
 
   .criteria-list li,
@@ -1954,31 +1956,31 @@ label,
   .review-group-title,
   .eligibility-result .result-title,
   .success-card h3 {
-    font-size: clamp(19px, 5.1vw, 23px);
+    font-size: clamp(16px, 4.5vw, 19px);
   }
 
   .welcome-criteria-title {
-    font-size: clamp(21px, 5.6vw, 25px);
+    font-size: clamp(17px, 4.8vw, 21px);
     line-height: 1.35;
   }
 
   .mode-choice-head,
   .mode-choice-card[data-mode="online"] .mode-choice-head,
   .mode-choice-card[data-mode="pdf"] .mode-choice-head {
-    font-size: clamp(18px, 4.9vw, 22px);
+    font-size: clamp(16px, 4.4vw, 19px);
   }
 
   .mode-choice-card[data-mode="online"] .mode-choice-copy,
   .mode-choice-card[data-mode="pdf"] .mode-choice-copy {
-    font-size: clamp(16px, 4.4vw, 19px);
+    font-size: clamp(14px, 4vw, 16px);
   }
 
   .policy-question {
-    font-size: clamp(17px, 4.4vw, 20px);
+    font-size: clamp(15px, 4vw, 18px);
   }
 
   .policy-choice-title {
-    font-size: clamp(14px, 3.9vw, 17px);
+    font-size: clamp(13px, 3.5vw, 15px);
   }
 
   .field-help,
@@ -1986,31 +1988,31 @@ label,
   .level-guide,
   .page-counter,
   .brand-chip {
-    font-size: clamp(13px, 3.8vw, 16px);
+    font-size: clamp(12px, 3.2vw, 14px);
     line-height: 1.42;
   }
 
   .btn {
-    font-size: clamp(17px, 4.5vw, 20px);
+    font-size: clamp(15px, 4vw, 17px);
   }
 
   #backBtn,
   #nextBtn,
   #submitBtn {
-    min-height: 60px;
+    min-height: 52px;
     padding: 14px 18px;
-    font-size: clamp(18px, 4.7vw, 21px);
+    font-size: clamp(15px, 4.2vw, 17px);
   }
 
   .review-confirm {
-    font-size: clamp(15px, 4vw, 18px);
-    line-height: 1.62;
+    font-size: clamp(13px, 3.6vw, 15px);
+    line-height: 1.52;
   }
 
   .checkbox-grid label {
-    font-size: clamp(14px, 3.9vw, 17px);
+    font-size: clamp(13px, 3.5vw, 15px);
     padding: 10px 12px;
-    line-height: 1.6;
+    line-height: 1.5;
   }
 
   .form-page .grid {
