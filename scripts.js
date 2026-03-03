@@ -1438,6 +1438,15 @@ const FALLBACK_GAS_URL = "";
           return;
         }
 
+        if (response.result && response.result.duplicate) {
+          setPdfUploadStatus(
+            "A matching PDF submission was received recently, so a new row was not added.\n" +
+            "(အချက်အလက်တူညီသော PDF တင်သွင်းမှုကို မကြာသေးမီက လက်ခံရရှိထားသောကြောင့် row အသစ် မထည့်သွင်းပါ။)",
+            true
+          );
+          return;
+        }
+
         const savedUrl = getSafeHttpUrl(response.result && response.result.pdfFileUrl);
         const successHtml =
           "Your completed PDF was uploaded successfully.<br>(ဖြည့်ပြီး PDF ကို အောင်မြင်စွာ တင်ပြီးပါပြီ။)" +
@@ -3223,6 +3232,15 @@ const FALLBACK_GAS_URL = "";
           return;
         }
         if (response.ok) {
+          if (response.result && response.result.duplicate) {
+            showStatusModal(
+              "Already submitted / (တင်သွင်းပြီးဖြစ်သည်)",
+              "A matching submission was received recently, so a new row was not added.\n" +
+              "(အချက်အလက်တူညီသော တင်သွင်းမှုကို မကြာသေးမီက လက်ခံရရှိထားသောကြောင့် row အသစ် မထည့်သွင်းပါ။)",
+              {}
+            );
+            return;
+          }
           showStatusModal(SUBMIT_SUCCESS_TITLE, SUBMIT_SUCCESS_COPY, {
             resetToFirstPage: true
           });
