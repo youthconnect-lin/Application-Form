@@ -29,6 +29,8 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
+  /* Keep English glyphs on Inter while using this face for Myanmar script. */
+  unicode-range: U+1000-109F, U+A9E0-A9FF, U+AA60-AA7F;
 }
 /* Load Myanmar3 directly from the same host to avoid external DNS dependency. */
 @font-face {
@@ -86,7 +88,7 @@
   --layout-sidebar-width: clamp(280px, 30vw, 360px);
   --layout-gap: 20px;
   /* Keep Myanmar fallbacks here so Burmese text without .my class still renders correctly. */
-  --font-latin: "Inter", "MyMyanmar Universal", "Myanmar3", "Yunghkio", "Masterpiece Uni Sans", "Segoe UI", Arial, sans-serif;
+  --font-latin: "Inter", "Myanmar Thuriya", "Myanmar3", "Noto Sans Myanmar", "Segoe UI", Arial, sans-serif;
   --font-myanmar: "Myanmar Thuriya", "MyMyanmar Universal", "Myanmar3", "Yunghkio", "Masterpiece Uni Sans", "Noto Sans Myanmar", "Myanmar Text", "Padauk", sans-serif;
 }
 
@@ -2236,8 +2238,8 @@ label,
             <h4 class="side-title welcome-criteria-title">Eligibility Criteria / (သင်တန်းတက်ရောက်နိုင်ရန် သတ်မှတ်ချက်များ)</h4>
             <ol class="criteria-list">
               <li>
-                <span>(Age: Between 18-25 years old)</span>
-                <span class="my">(အသက် - ၁၈ မှ ၂၅ နှစ်အတွင်းဖြစ်ရမည်။)</span>
+                <span>(Age: Between 17-25 years old)</span>
+                <span class="my">(အသက် - ၁၇ မှ ၂၅ နှစ်အတွင်းဖြစ်ရမည်။)</span>
               </li>
               <li>
                 <span>(Location: Reside in the Mae Sot area)</span>
