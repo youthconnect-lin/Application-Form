@@ -868,12 +868,12 @@ body {
 }
 
 .mode-choice-card[data-mode="online"] .mode-choice-head {
-  font-size: 16px;
+  font-size: 14px;
   color: #0c4a6e;
 }
 
 .mode-choice-card[data-mode="online"] .mode-choice-copy {
-  font-size: 16px;
+  font-size: 14px;
   color: #0e7490;
 }
 
@@ -916,7 +916,7 @@ body {
   position: absolute;
   right: 12px;
   top: 10px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.2px;
   border-radius: 999px;
@@ -994,7 +994,7 @@ body {
 
 .mode-choice-copy {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   color: #475569;
   line-height: 1.55;
 }
