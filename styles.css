@@ -63,7 +63,7 @@
   /* Part E: Burmese text inside headings/titles */
   --font-my-title: "Myanmar Thuriya", "Myanmar Ethic", "MyMyanmar Universal", "Myanmar3", "Noto Sans Myanmar", sans-serif;
   /* Part F: Burmese fallback for mixed EN/MM text without .my wrappers */
-  --font-my-fallback:"Myanmar3", "Noto Sans Myanmar", "Myanmar Text", "Padauk", sans-serif;
+  --font-my-fallback:"Myanmar Thuriya","Myanmar3", "Noto Sans Myanmar", "Myanmar Text", "Padauk", sans-serif;
 
   /* Policy page part labels (manual override points) */
   --font-my-policy-terms: var(--font-my-card);
