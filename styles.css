@@ -107,9 +107,9 @@ html {
 html,
 body {
   max-width: 100%;
-  /* Prevent page-wide horizontal overflow/bottom scrollbar. */
-  overflow-x: hidden;
-  touch-action: auto;
+  /* Keep zoom/pan usable while still constraining layout overflow. */
+  overflow-x: auto;
+  touch-action: pan-x pan-y pinch-zoom;
 }
 
 /* Keep mobile zoom readable by avoiding horizontal clipping and forcing wraps. */
@@ -542,7 +542,8 @@ body {
   color: #334155;
   font-weight: 700;
   text-align: right;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
   grid-column: 2;
   grid-row: 1;
 }
@@ -1892,7 +1893,24 @@ label,
   }
 
   .wizard-top {
+    grid-template-columns: 1fr;
+    row-gap: 6px;
     padding-inline: 14px;
+  }
+
+  .page-title {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .page-counter {
+    grid-column: 1;
+    grid-row: 2;
+    text-align: left;
+  }
+
+  .progress {
+    grid-column: 1;
   }
 
   .panel,
@@ -2156,6 +2174,12 @@ label,
   #policyAgreementYes:checked + .policy-choice-body,
   #policyAgreementNo:checked + .policy-choice-body {
     animation: none;
+  }
+
+  #modalClose {
+    min-width: 0;
+    width: min(100%, 230px);
+    white-space: normal;
   }
 
   body,
