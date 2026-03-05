@@ -1175,6 +1175,52 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       return cleanLabelText(field.name || field.id || "Field");
     }
 
+    function isComputerSkillCheckboxField(field) {
+      if (!field || field.type !== "checkbox") {
+        return false;
+      }
+      const fieldKey = String(field.id || field.name || "");
+      return /^computer(Basic|Advanced|Expert)/.test(fieldKey);
+    }
+
+    function getComputerSkillDetailsForReview() {
+      const level = String(computerLevelInput && computerLevelInput.value || "").trim();
+      if (!level || level === "none") {
+        return "";
+      }
+
+      let activeWrap = null;
+      if (level === "basic") {
+        activeWrap = computerBasicWrap;
+      } else if (level === "advanced") {
+        activeWrap = computerAdvancedWrap;
+      } else if (level === "expert") {
+        activeWrap = computerExpertWrap;
+      }
+
+      if (!activeWrap) {
+        return "";
+      }
+
+      const checkedBoxes = Array.from(
+        activeWrap.querySelectorAll('input[type="checkbox"]:checked')
+      );
+      if (!checkedBoxes.length) {
+        return "No checklist selected / (စာရင်းမရွေးချယ်ထားပါ)";
+      }
+
+      const labels = checkedBoxes
+        .map(function (checkbox) {
+          const parentLabel = checkbox.closest("label");
+          return cleanLabelText(parentLabel ? parentLabel.textContent : checkbox.name || checkbox.id);
+        })
+        .filter(function (label) {
+          return !!label;
+        });
+
+      return labels.join(", ");
+    }
+
     function getFieldValueForReview(field) {
       if (field.type === "checkbox") {
         return field.checked ? "Yes / (ဟုတ်ကဲ့)" : "No / (မဟုတ်ပါ)";
@@ -1207,7 +1253,14 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
         if (!selectedOption || !field.value) {
           return "Not provided / (မဖြည့်ထားပါ)";
         }
-        return selectedOption.textContent.trim();
+        const selectedText = selectedOption.textContent.trim();
+        if (field.id === "computerLevel") {
+          const detailsText = getComputerSkillDetailsForReview();
+          return detailsText
+            ? selectedText + "\nDetails / (အသေးစိတ်): " + detailsText
+            : selectedText;
+        }
+        return selectedText;
       }
 
       const value = String(field.value || "").trim();
@@ -1232,6 +1285,7 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
           if (field.disabled) return false;
           if (field.type === "hidden") return false;
           if (field.type === "button" || field.type === "submit" || field.type === "reset") return false;
+          if (isComputerSkillCheckboxField(field)) return false;
           if (field.type === "radio") {
             const groupName = String(field.name || "");
             if (!groupName || seenRadioGroups.has(groupName)) {
