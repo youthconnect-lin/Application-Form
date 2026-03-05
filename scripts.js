@@ -1114,7 +1114,11 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       reviewSummary.innerHTML = "";
 
       for (let pageIndex = 0; pageIndex < REVIEW_PAGE_INDEX; pageIndex += 1) {
-        if (pageIndex === NOT_ELIGIBLE_PAGE_INDEX) {
+        if (
+          pageIndex === NOT_ELIGIBLE_PAGE_INDEX ||
+          pageIndex === POLICY_PAGE_INDEX ||
+          pageIndex === ELIGIBILITY_PAGE_INDEX
+        ) {
           continue;
         }
 
@@ -1742,6 +1746,7 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
     }
 
     function triggerNextButtonFromTerminalSelect(field) {
+      if (!shouldUseMobileAutoAdvance()) return false;
       if (!isPageTerminalSelect(field)) return false;
       if (!nextBtn || nextBtn.disabled || nextBtn.style.display === "none") return false;
       const page = pages[currentPage];
@@ -1834,22 +1839,12 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       autoAdvanceToNextField(field);
     }
 
-    function handleProvinceSelection(event) {
+    function handleProvinceSelection() {
       const selectedProvince = String(provinceInput.value || "");
-      const provinceChanged = selectedProvince !== lastProvinceSelection;
       lastProvinceSelection = selectedProvince;
 
       populateDistrictOptionsForProvince(selectedProvince);
       updateActionVisibility();
-
-      if (!provinceChanged || !selectedProvince || !shouldUseMobileAutoAdvance()) {
-        return;
-      }
-
-      // On mobile, open district picker immediately after choosing province.
-      window.setTimeout(function () {
-        openSelectPicker(districtInput);
-      }, 0);
     }
 
     async function loadThailandDistrictData() {
@@ -2198,13 +2193,15 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
 
     function buildSubmissionClosedTrackingPayload(meta) {
       const details = meta || {};
-      const nowIso = new Date().toISOString();
+      const now = new Date();
+      const nowIso = now.toISOString();
       const href = String(details.href || "").trim();
       const label = String(details.label || "").trim();
       const context = String(details.context || "").trim();
 
       return {
         submittedAt: nowIso,
+        clientLocalTime: formatLocalTimestamp(now),
         applicationMode: "closed_link_click",
         submissionType: SUBMISSION_CLOSED_TRACKING_TYPE,
         submissionStatus: SUBMISSION_CLOSED_TRACKING_STATUS,
