@@ -384,6 +384,38 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       return Number.isFinite(scale) && scale > 1.02;
     }
 
+    function resetHorizontalScrollToZero() {
+      if (typeof window === "undefined" || typeof window.scrollTo !== "function") {
+        return;
+      }
+      const y = Number(window.scrollY || window.pageYOffset || 0);
+      try {
+        window.scrollTo({ top: y, left: 0, behavior: "auto" });
+      } catch (_) {
+        window.scrollTo(0, y);
+      }
+    }
+
+    function syncPolicyZoomInteractionState() {
+      if (typeof document === "undefined") {
+        return;
+      }
+      const root = document.documentElement;
+      if (!root || !root.classList) {
+        return;
+      }
+
+      const onPolicyPage = POLICY_PAGE_INDEX >= 0 && currentPage === POLICY_PAGE_INDEX;
+      const zoomedIn = isViewportZoomedIn();
+
+      root.classList.toggle("on-policy-page", onPolicyPage);
+      root.classList.toggle("is-zoomed-in", zoomedIn);
+
+      if (onPolicyPage && !zoomedIn) {
+        resetHorizontalScrollToZero();
+      }
+    }
+
     function shouldSuppressMobileFocusAssist() {
       if (!shouldUseMobileAutoAdvance()) {
         return true;
@@ -456,6 +488,7 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
           !event ||
           !event.cancelable ||
           !touchGestureStartPoint ||
+          isViewportZoomedIn() ||
           POLICY_PAGE_INDEX < 0 ||
           currentPage !== POLICY_PAGE_INDEX
         ) {
@@ -2524,6 +2557,8 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
         page.classList.toggle("active", pageIndex === currentPage);
       });
 
+      syncPolicyZoomInteractionState();
+
       const onNotEligiblePage = currentPage === NOT_ELIGIBLE_PAGE_INDEX;
       const onPolicyDeclinedPage = currentPage === POLICY_DECLINED_PAGE_INDEX;
       const onSubmissionClosedPage = currentPage === SUBMISSION_CLOSED_PAGE_INDEX;
@@ -3427,8 +3462,18 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
     formatInlineBilingualText();
     markMyanmarTextElements();
     startAutoBilingualFormatting();
-    window.addEventListener("resize", ensureMobileLayoutClass);
-    window.addEventListener("orientationchange", ensureMobileLayoutClass);
+    window.addEventListener("resize", function () {
+      ensureMobileLayoutClass();
+      syncPolicyZoomInteractionState();
+    });
+    window.addEventListener("orientationchange", function () {
+      ensureMobileLayoutClass();
+      syncPolicyZoomInteractionState();
+    });
+    if (window.visualViewport && typeof window.visualViewport.addEventListener === "function") {
+      window.visualViewport.addEventListener("resize", syncPolicyZoomInteractionState, { passive: true });
+      window.visualViewport.addEventListener("scroll", syncPolicyZoomInteractionState, { passive: true });
+    }
     setApplicationMode("");
     showApplicationModeError(false);
     renderPendingEligibility();
