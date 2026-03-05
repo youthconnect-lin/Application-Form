@@ -109,7 +109,9 @@ body {
   max-width: 100%;
   /* Keep zoom/pan usable while still constraining layout overflow. */
   overflow-x: hidden;
-  touch-action: auto;
+  overflow-x: clip;
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-x: none;
 }
 
 /* Keep mobile zoom readable by avoiding horizontal clipping and forcing wraps. */
@@ -1737,6 +1739,14 @@ label,
   --my-title-pad-bottom: var(--my-title-pad-bottom-mobile);
 }
 
+.force-mobile,
+.force-mobile body {
+  overflow-x: hidden;
+  overflow-x: clip;
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-x: none;
+}
+
 .force-mobile body {
   padding: 12px 10px 18px;
   min-height: 100dvh;
@@ -1864,6 +1874,14 @@ label,
     --my-title-line-height: var(--my-title-line-height-mobile);
     --my-title-pad-top: var(--my-title-pad-top-mobile);
     --my-title-pad-bottom: var(--my-title-pad-bottom-mobile);
+  }
+
+  html,
+  body {
+    overflow-x: hidden;
+    overflow-x: clip;
+    touch-action: pan-y pinch-zoom;
+    overscroll-behavior-x: none;
   }
 
   body {
@@ -2154,12 +2172,13 @@ label,
 
   .shell,
   .panel,
+  .form-wrap,
+  .form-page,
   .section-card,
   .mode-card,
   .subsection-card,
   .language-block,
   .review-group,
-  .form-page,
   .grid,
   .grid > * {
     max-width: 100%;
