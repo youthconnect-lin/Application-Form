@@ -2957,11 +2957,7 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
           submitPayload(pdfTrackingPayload)
             .then(function (trackingResponse) {
               if (!trackingResponse || !trackingResponse.ok) {
-                console.warn(
-  "PDF tracking failed:",
-  typeof trackingResponse !== "undefined" && trackingResponse
-    ? trackingResponse.error
-    : "Unknown error"
+                console.warn("PDF tracking failed:",typeof trackingResponse !== "undefined" && trackingResponse? trackingResponse.error: "Unknown error"
                 pdfDownloadLogged = false;
               }
             })
