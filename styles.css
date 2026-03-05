@@ -684,17 +684,9 @@ body {
 
 #policyPage .policy-terms-part,
 #policyPage .policy-data-part {
-  max-height: none;
-  overflow: visible;
-}
-
-@media (min-width: 1025px) {
-  #policyPage .policy-terms-part,
-  #policyPage .policy-data-part {
-    /* Keep page 1 height closer to other pages on desktop only. */
-    max-height: 220px;
-    overflow-y: auto;
-  }
+  /* Keep page 1 height closer to other pages on desktop/tablet. */
+  max-height: 220px;
+  overflow-y: auto;
 }
 
 #policyPage .policy-decision {
@@ -728,6 +720,7 @@ body {
 }
 
 .policy-choice-body {
+  width: 100%;
   min-height: 88px;
   border: 2px solid #dbe7f8;
   border-radius: 12px;
@@ -2226,6 +2219,24 @@ label,
 
   #policyPage {
     overflow-x: clip;
+  }
+
+  #policyPage > .section-card {
+    padding-inline: 10px;
+  }
+
+  #policyPage .subsection-card {
+    padding-inline: 10px;
+  }
+
+  #policyPage .criteria-list {
+    padding-left: 16px;
+  }
+
+  #policyPage .policy-terms-part,
+  #policyPage .policy-data-part {
+    max-height: none;
+    overflow: visible;
   }
 
   #modalClose {
