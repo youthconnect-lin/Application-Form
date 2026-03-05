@@ -451,6 +451,32 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
         suspendMobileFocusAssist(MOBILE_FOCUS_ASSIST_SUSPEND_MS);
       }, { passive: true });
 
+      form.addEventListener("touchmove", function (event) {
+        if (
+          !event ||
+          !event.cancelable ||
+          !touchGestureStartPoint ||
+          POLICY_PAGE_INDEX < 0 ||
+          currentPage !== POLICY_PAGE_INDEX
+        ) {
+          return;
+        }
+
+        const touch = event.touches && event.touches[0];
+        if (!touch) {
+          return;
+        }
+
+        const deltaX = Math.abs(Number(touch.clientX || 0) - touchGestureStartPoint.x);
+        const deltaY = Math.abs(Number(touch.clientY || 0) - touchGestureStartPoint.y);
+
+        if (deltaX < TOUCH_SCROLL_GESTURE_THRESHOLD_PX || deltaX <= deltaY) {
+          return;
+        }
+
+        event.preventDefault();
+      }, { passive: false });
+
       form.addEventListener("touchend", function () {
         if (touchGestureStartPoint && touchGestureStartPoint.moved) {
           suspendMobileFocusAssist(MOBILE_FOCUS_ASSIST_SCROLL_COOLDOWN_MS);
