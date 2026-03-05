@@ -2984,7 +2984,7 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
         html: true,
         returnToWelcome: true
       });
-    });
+      }
 
     if (pdfApplicantNameInput) {
       pdfApplicantNameInput.addEventListener("input", function () {
