@@ -2260,6 +2260,33 @@ label,
 }
 
 /* ==========================================================================
+   15A) IOS PARITY
+   Keep iOS touch layout aligned with Android touch layout.
+   ========================================================================== */
+@media (max-width: 1024px), (hover: none) and (pointer: coarse) {
+  html.platform-ios,
+  html.platform-ios body {
+    overflow-x: hidden;
+    overflow-x: clip;
+    touch-action: auto;
+    overscroll-behavior: auto;
+  }
+
+  html.platform-ios body {
+    padding: 12px 10px 18px;
+    min-height: 100dvh;
+    min-height: -webkit-fill-available;
+  }
+
+  html.platform-ios .shell {
+    width: 100%;
+    max-width: none;
+    min-height: 100dvh;
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* ==========================================================================
    16) SMALL MOBILE (<= 360px)
    ========================================================================== */
 @media (max-width: 360px) {
