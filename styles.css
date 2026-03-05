@@ -682,6 +682,13 @@ body {
   overflow-x: hidden;
 }
 
+#policyPage .policy-terms-part,
+#policyPage .policy-data-part {
+  /* Keep page 1 height closer to other pages on desktop/tablet. */
+  max-height: 220px;
+  overflow-y: auto;
+}
+
 #policyPage .policy-decision {
   margin-top: 14px;
 }
@@ -1869,7 +1876,7 @@ label,
 /* ==========================================================================
    15) MOBILE (<= 760px)
    ========================================================================== */
-@media (max-width: 760px), (max-device-width: 1024px), (hover: none) and (pointer: coarse) {
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
   :root {
     --my-title-line-height: var(--my-title-line-height-mobile);
     --my-title-pad-top: var(--my-title-pad-top-mobile);
@@ -2211,6 +2218,12 @@ label,
 
   #policyPage {
     overflow-x: clip;
+  }
+
+  #policyPage .policy-terms-part,
+  #policyPage .policy-data-part {
+    max-height: none;
+    overflow: visible;
   }
 
   #modalClose {
