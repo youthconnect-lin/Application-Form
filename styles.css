@@ -578,6 +578,7 @@ body {
 
 .form-page {
   display: none;
+   width: 100%;
 }
 
 .form-page.active {
