@@ -553,7 +553,7 @@ body {
 .page-title {
   display: block;
   margin: 0;
-  font-size: 20px;
+  font-size: var(--fs-page-title-global);
   color: #0f3a66;
   line-height: 1.35;
   text-align: left;
@@ -1739,135 +1739,6 @@ label,
   word-break: normal;
 }
 
-/* Apps Script mobile fallback: force mobile layout when browser still reports desktop viewport. */
-.force-mobile {
-  --my-title-line-height: var(--my-title-line-height-mobile);
-  --my-title-pad-top: var(--my-title-pad-top-mobile);
-  --my-title-pad-bottom: var(--my-title-pad-bottom-mobile);
-}
-
-.force-mobile,
-.force-mobile body {
-  overflow-x: hidden;
-  overflow-x: clip;
-  touch-action: auto;
-  overscroll-behavior: auto;
-}
-
-.force-mobile body {
-  padding: 12px 10px 18px;
-  min-height: 100dvh;
-}
-
-.force-mobile .shell {
-  max-width: none;
-  width: 100%;
-  min-height: 100dvh;
-  gap: 12px;
-}
-
-.force-mobile .panel {
-  border-radius: 14px;
-  border-left: 1px solid #dfe3eb;
-  border-right: 1px solid #dfe3eb;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05);
-}
-
-.force-mobile .aside,
-.force-mobile .form-wrap {
-  padding: 16px 12px;
-}
-
-.force-mobile .section-card,
-.force-mobile .mode-card,
-.force-mobile .subsection-card,
-.force-mobile .language-block,
-.force-mobile .review-group {
-  padding: 14px;
-}
-
-.force-mobile .wizard-top {
-  grid-template-columns: 1fr;
-  row-gap: 6px;
-  padding-inline: 14px;
-  max-width: 100%;
-  overflow-x: clip;
-}
-
-.force-mobile .page-title {
-  grid-column: 1;
-  grid-row: 1;
-  min-width: 0;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-.force-mobile .page-counter {
-  grid-column: 1;
-  grid-row: 2;
-  text-align: left;
-  min-width: 0;
-  max-width: 100%;
-}
-
-.force-mobile .review-row {
-  grid-template-columns: 1fr;
-}
-
-.force-mobile #welcomePage .welcome-intro-center,
-.force-mobile #welcomePage .bilingual-copy {
-  margin-left: auto;
-  margin-right: auto;
-  max-width: min(100%, 42rem);
-}
-
-.force-mobile .actions {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 8px;
-}
-
-.force-mobile .actions .btn {
-  width: 100%;
-  min-width: 0;
-}
-
-.force-mobile .checkbox-grid {
-  grid-template-columns: 1fr;
-}
-
-.force-mobile input,
-.force-mobile select,
-.force-mobile textarea {
-  padding: 16px 13px;
-  min-height: 58px;
-  line-height: 1.6;
-  font-size: 16px;
-}
-
-.force-mobile input:not([type="checkbox"]):not([type="radio"]):focus,
-.force-mobile select:focus,
-.force-mobile textarea:focus,
-.force-mobile input:not([type="checkbox"]):not([type="radio"]).is-mobile-focused,
-.force-mobile select.is-mobile-focused,
-.force-mobile textarea.is-mobile-focused {
-  border-color: var(--focus-blue);
-  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.16);
-}
-
-.force-mobile .form-page .grid {
-  gap: 12px;
-}
-
-.force-mobile .form-page .grid > div:not(.subsection-card):not(.language-block):not(.computer-skill-group) {
-  background: var(--card-bg-soft);
-  border: 1px solid #dbe5f2;
-  border-radius: 12px;
-  padding: 14px 12px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-}
-
 /* ==========================================================================
    14) TABLET (<= 1024px)
    ========================================================================== */
@@ -2079,7 +1950,6 @@ label,
   }
 
   .page-title {
-    font-size: clamp(18px, 5vw, 24px);
     line-height: 1.26;
   }
 
@@ -2256,18 +2126,6 @@ label,
     overflow-x: clip;
   }
 
-  #policyPage > .section-card {
-    padding-inline: 10px;
-  }
-
-  #policyPage .subsection-card {
-    padding-inline: 10px;
-  }
-
-  #policyPage .criteria-list {
-    padding-left: 16px;
-  }
-
   #policyPage .policy-terms-part,
   #policyPage .policy-data-part {
     max-height: none;
@@ -2422,9 +2280,6 @@ label {
     font-size: clamp(30px, 2.6vw, 40px);
   }
 
-  .page-title {
-    font-size: clamp(22px, 1.6vw, 32px);
-  }
 }
 @supports (text-wrap: balance) {
   .title,
@@ -2459,10 +2314,6 @@ body {
 
 .title {
   font-size: var(--fs-title-global);
-}
-
-.page-title {
-  font-size: var(--fs-page-title-global);
 }
 
 .section-title,
