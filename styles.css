@@ -684,9 +684,17 @@ body {
 
 #policyPage .policy-terms-part,
 #policyPage .policy-data-part {
-  /* Keep page 1 height closer to other pages on desktop/tablet. */
-  max-height: 220px;
-  overflow-y: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+@media (min-width: 1025px) {
+  #policyPage .policy-terms-part,
+  #policyPage .policy-data-part {
+    /* Keep page 1 height closer to other pages on desktop only. */
+    max-height: 220px;
+    overflow-y: auto;
+  }
 }
 
 #policyPage .policy-decision {
@@ -2218,12 +2226,6 @@ label,
 
   #policyPage {
     overflow-x: clip;
-  }
-
-  #policyPage .policy-terms-part,
-  #policyPage .policy-data-part {
-    max-height: none;
-    overflow: visible;
   }
 
   #modalClose {
