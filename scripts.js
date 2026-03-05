@@ -4,6 +4,34 @@ const FRONTEND_CONFIG_GAS_URL =
   typeof window.__FORM_CONFIG__.gasUrl !== "undefined"
     ? String(window.__FORM_CONFIG__.gasUrl || "").trim()
     : "";
+const FRONTEND_CONFIG_SPREADSHEET_ID =
+  typeof window !== "undefined" &&
+  window.__FORM_CONFIG__ &&
+  typeof window.__FORM_CONFIG__.spreadsheetId !== "undefined"
+    ? String(window.__FORM_CONFIG__.spreadsheetId || "").trim()
+    : "";
+const FRONTEND_CONFIG_SPREADSHEET_URL =
+  typeof window !== "undefined" &&
+  window.__FORM_CONFIG__ &&
+  typeof window.__FORM_CONFIG__.spreadsheetUrl !== "undefined"
+    ? String(window.__FORM_CONFIG__.spreadsheetUrl || "").trim()
+    : "";
+const FRONTEND_CONFIG_SPREADSHEET_GID =
+  typeof window !== "undefined" &&
+  window.__FORM_CONFIG__ &&
+  typeof window.__FORM_CONFIG__.sheetGid !== "undefined"
+    ? String(window.__FORM_CONFIG__.sheetGid || "").trim()
+    : "";
+const SPREADSHEET_ID_FROM_URL_MATCH =
+  FRONTEND_CONFIG_SPREADSHEET_URL.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+const SPREADSHEET_GID_FROM_URL_MATCH =
+  FRONTEND_CONFIG_SPREADSHEET_URL.match(/[?#&]gid=([0-9]+)/i);
+const TARGET_SPREADSHEET_ID =
+  FRONTEND_CONFIG_SPREADSHEET_ID ||
+  (SPREADSHEET_ID_FROM_URL_MATCH ? String(SPREADSHEET_ID_FROM_URL_MATCH[1] || "").trim() : "");
+const TARGET_SPREADSHEET_GID =
+  FRONTEND_CONFIG_SPREADSHEET_GID ||
+  (SPREADSHEET_GID_FROM_URL_MATCH ? String(SPREADSHEET_GID_FROM_URL_MATCH[1] || "").trim() : "");
 const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddpsEl--w7voYus_ge47_WdXfBNj-Gd-asMcPiCjSbKlSCGHTouMdchK/exec";
     const TEMPLATE_WEB_APP_URL =
       typeof window !== "undefined" && window.__WEB_APP_URL__
@@ -2218,8 +2246,8 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       if (GAS_URL && typeof fetch === "function") {
         fetch(GAS_URL, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
+          body: JSON.stringify(payload || {}),
           keepalive: true
         }).catch(function (error) {
           console.warn("Closed-period tracking fetch failed:", error);
@@ -2504,6 +2532,15 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       if (!data.submittedAt) {
         data.submittedAt = now.toISOString();
       }
+      if (TARGET_SPREADSHEET_ID && !data.spreadsheetId) {
+        data.spreadsheetId = TARGET_SPREADSHEET_ID;
+      }
+      if (FRONTEND_CONFIG_SPREADSHEET_URL && !data.spreadsheetUrl) {
+        data.spreadsheetUrl = FRONTEND_CONFIG_SPREADSHEET_URL;
+      }
+      if (TARGET_SPREADSHEET_GID && !data.sheetGid) {
+        data.sheetGid = TARGET_SPREADSHEET_GID;
+      }
 
       return data;
     }
@@ -2575,13 +2612,14 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
 
     async function postToGAS(payload) {
       try {
-        const formData = new FormData();
-        for (const key in payload) {
-          formData.append(key, payload[key]);
-        }
-        fetch(GAS_URL,{
+        const response = await fetch(GAS_URL, {
           method: "POST",
-          body: formData
+          // Use a CORS-safelisted content type while keeping JSON payload
+          // so Apps Script can parse e.postData.contents via JSON.parse.
+          headers: {
+            "Content-Type": "text/plain;charset=UTF-8"
+          },
+          body: JSON.stringify(payload || {})
         });
 
         const responseText = await response.text();
@@ -2970,6 +3008,7 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
               console.warn("PDF tracking failed:", error);
               pdfDownloadLogged = false;
             });
+        }
       }
 
       const pdfDownloadThankYouHtml =
@@ -2984,7 +3023,7 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
         html: true,
         returnToWelcome: true
       });
-      }
+    });
 
     if (pdfApplicantNameInput) {
       pdfApplicantNameInput.addEventListener("input", function () {
@@ -3338,4 +3377,3 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
     } else {
       setPage(0);
     }
-    });
