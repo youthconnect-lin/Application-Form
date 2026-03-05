@@ -684,9 +684,8 @@ body {
 
 #policyPage .policy-terms-part,
 #policyPage .policy-data-part {
-  /* Keep page 1 height closer to other pages on desktop/tablet. */
-  max-height: 220px;
-  overflow-y: auto;
+  max-height: none;
+  overflow: visible;
 }
 
 #policyPage .policy-decision {
