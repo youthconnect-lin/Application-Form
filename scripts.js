@@ -2575,10 +2575,13 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
 
     async function postToGAS(payload) {
       try {
-        const response = await fetch(GAS_URL, {
+        const formData = new FormData();
+        for (const key in payload) {
+          formData.append(key, payload[key]);
+        }
+        fetch(GAS_URL,{
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: formData
         });
 
         const responseText = await response.text();
