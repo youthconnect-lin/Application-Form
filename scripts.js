@@ -3421,4 +3421,5 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       openSubmissionClosedPage();
     } else {
       setPage(0);
+      scrollToPageTop();
     }
