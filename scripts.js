@@ -2969,7 +2969,6 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
               console.warn("PDF tracking failed:", error);
               pdfDownloadLogged = false;
             });
-        }
       }
 
       const pdfDownloadThankYouHtml =
