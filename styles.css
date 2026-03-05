@@ -2259,6 +2259,32 @@ label,
     padding-inline: 14px;
   }
 }
+
+/* ==========================================================================
+   16A) PAGE 1 ZOOM/PAN SAFETY
+   Lock horizontal drift at normal scale, but allow full panning when zoomed in.
+   ========================================================================== */
+html.on-policy-page:not(.is-zoomed-in),
+html.on-policy-page:not(.is-zoomed-in) body {
+  overflow-x: hidden !important;
+  overscroll-behavior-x: none !important;
+}
+
+html.on-policy-page.is-zoomed-in,
+html.on-policy-page.is-zoomed-in body {
+  overflow: auto !important;
+  touch-action: auto !important;
+  overscroll-behavior: auto !important;
+}
+
+html.on-policy-page.is-zoomed-in .shell,
+html.on-policy-page.is-zoomed-in .panel,
+html.on-policy-page.is-zoomed-in .form-wrap,
+html.on-policy-page.is-zoomed-in .form-page,
+html.on-policy-page.is-zoomed-in #policyPage {
+  overflow: visible !important;
+  overflow-x: visible !important;
+}
 /* ==========================================================================
    17) TEXT FLOW & LARGE-SCREEN TWEAKS
    Improve hyphenation, balanced wrapping and add large-screen spacing.
