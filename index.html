@@ -10,9 +10,19 @@
     (function () {
       try {
         var ua = navigator.userAgent || "";
+        var uaLower = ua.toLowerCase();
+        var maxTouchPoints = Number(navigator.maxTouchPoints || 0);
+        var isAndroid = /android/.test(uaLower);
+        var isIOS = /iphone|ipad|ipod/.test(uaLower) || (/macintosh/.test(uaLower) && maxTouchPoints > 1);
         var touch = "ontouchstart" in window || (navigator.maxTouchPoints || 0) > 0;
         var width = Math.min(window.innerWidth || 9999, window.screen && window.screen.width ? window.screen.width : 9999);
         var mobileUa = /Android|iPhone|iPad|iPod|Mobile|Opera Mini|IEMobile/i.test(ua);
+        if (isIOS) {
+          document.documentElement.classList.add("platform-ios");
+        }
+        if (isAndroid && !isIOS) {
+          document.documentElement.classList.add("platform-android");
+        }
         if (touch && (width <= 1024 || mobileUa)) {
           document.documentElement.classList.add("force-mobile");
         }
