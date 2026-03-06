@@ -52,7 +52,7 @@
   /* Myanmar text inside headings/titles */
   --font-my-title: "Myanmar Thuriya", "Myanmar Ethic", sans-serif;
   /* Myanmar fallback for mixed EN/MM text without .my wrappers */
-  --font-my-fallback:  "Myanmar Ethic", "Myanmar Thuriya",sans-serif;
+  --font-my-fallback: "Myanmar Thuriya", "Myanmar Ethic", sans-serif;
 
   /* ======================================================================
      ROLE FONT MAP (EDIT THESE FIRST FOR FUTURE CHANGES)
