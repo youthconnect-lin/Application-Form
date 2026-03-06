@@ -46,13 +46,13 @@
   /* Part B: English heading/title text */
   --font-en-title: "Inter", "Segoe UI", Arial, sans-serif;
   /* Part C: Burmese generic text (.my / .my-line / :lang(my)) */
-  --font-my-body: "Myanmar Ethic", "Myanmar Thuriya", sans-serif;
+  --font-my-body: "Myanmar Thuriya", "Myanmar Ethic", sans-serif;
   /* Part D: Burmese text inside cards/sections */
-  --font-my-card: "Myanmar Ethic", "Myanmar Thuriya", sans-serif;
+  --font-my-card: "Myanmar Thuriya", "Myanmar Ethic", sans-serif;
   /* Part E: Burmese text inside headings/titles */
   --font-my-title: "Myanmar Thuriya", "Myanmar Ethic", sans-serif;
   /* Part F: Burmese fallback for mixed EN/MM text without .my wrappers */
-  --font-my-fallback: "Myanmar Ethic", "Myanmar Thuriya", sans-serif;
+  --font-my-fallback: "Myanmar Thuriya", "Myanmar Ethic", sans-serif;
 
   /* Policy page part labels (manual override points) */
   --font-my-policy-terms: var(--font-my-card);
@@ -1307,7 +1307,7 @@ textarea {
   border: 1px solid #d8e3f1;
   border-radius: 10px;
   background: var(--card-bg-soft);
-  font-family: var(--font-en-body), "Myanmar Ethic", "Myanmar Thuriya", sans-serif;
+  font-family: var(--font-en-body), "Myanmar Thuriya", "Myanmar Ethic", sans-serif;
   font-weight: 600;
   font-size: 12px;
   line-height: 1.6;
