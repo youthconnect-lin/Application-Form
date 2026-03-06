@@ -202,6 +202,7 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       "+000": { regex: /^\d{6,14}$/ }
     };
     const TOUCH_SCROLL_GESTURE_THRESHOLD_PX = 10;
+    const HORIZONTAL_SWIPE_DOMINANCE_RATIO = 1.35;
     const MOBILE_FOCUS_ASSIST_SUSPEND_MS = 260;
     const MOBILE_FOCUS_ASSIST_SCROLL_COOLDOWN_MS = 140;
     const PDF_UPLOAD_MAX_BYTES = 10 * 1024 * 1024;
@@ -341,12 +342,42 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
         const ua = String(navigator.userAgent || "").toLowerCase();
         const maxTouchPoints = Number(navigator.maxTouchPoints || 0);
         const isAndroid = /android/.test(ua);
+        const isFacebookBrowser = /(fban|fbav|fb_iab|fb4a|messenger)/.test(ua);
         const isIOS =
           /iphone|ipad|ipod/.test(ua) ||
           (/macintosh/.test(ua) && maxTouchPoints > 1);
 
         root.classList.toggle("platform-ios", isIOS);
         root.classList.toggle("platform-android", isAndroid && !isIOS);
+        root.classList.toggle("platform-facebook-browser", isFacebookBrowser);
+      } catch (err) {}
+    }
+
+    function isFacebookInAppBrowser() {
+      if (typeof document !== "undefined") {
+        const root = document.documentElement;
+        if (root && root.classList && root.classList.contains("platform-facebook-browser")) {
+          return true;
+        }
+      }
+      return /(fban|fbav|fb_iab|fb4a|messenger)/.test(String(navigator.userAgent || "").toLowerCase());
+    }
+
+    function ensureMobileLayoutClass() {
+      try {
+        const root = document.documentElement;
+        if (!root) return;
+        applyPlatformClass();
+        const ua = navigator.userAgent || "";
+        const touch = "ontouchstart" in window || (navigator.maxTouchPoints || 0) > 0;
+        const screenWidth = window.screen && window.screen.width ? window.screen.width : 9999;
+        const width = Math.min(window.innerWidth || 9999, screenWidth);
+        const mobileUa = /Android|iPhone|iPad|iPod|Mobile|Opera Mini|IEMobile/i.test(ua);
+        if (touch && (width <= 1024 || mobileUa)) {
+          root.classList.add("force-mobile");
+        } else {
+          root.classList.remove("force-mobile");
+        }
       } catch (err) {}
     }
 
@@ -531,6 +562,7 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
           !event ||
           !event.cancelable ||
           !touchGestureStartPoint ||
+          isFacebookInAppBrowser() ||
           isViewportZoomedIn() ||
           POLICY_PAGE_INDEX < 0 ||
           currentPage !== POLICY_PAGE_INDEX
@@ -546,7 +578,10 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
         const deltaX = Math.abs(Number(touch.clientX || 0) - touchGestureStartPoint.x);
         const deltaY = Math.abs(Number(touch.clientY || 0) - touchGestureStartPoint.y);
 
-        if (deltaX < TOUCH_SCROLL_GESTURE_THRESHOLD_PX || deltaX <= deltaY) {
+        if (
+          deltaX < TOUCH_SCROLL_GESTURE_THRESHOLD_PX ||
+          deltaX <= deltaY * HORIZONTAL_SWIPE_DOMINANCE_RATIO
+        ) {
           return;
         }
 
@@ -1379,7 +1414,7 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       }
 
       if (mode === "online") {
-        onlineModeNote.style.display = "none";
+        onlineModeNote.style.display = "block";
         pdfCard.style.display = "none";
         setPdfUploadEnabled(false);
         setPdfUploadStatus("");
@@ -1856,7 +1891,11 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       window.setTimeout(function () {
         if (shouldSuppressMobileFocusAssist()) return;
         try {
-          field.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" });
+          field.scrollIntoView({
+            block: "center",
+            inline: "nearest",
+            behavior: isFacebookInAppBrowser() ? "auto" : "smooth"
+          });
         } catch (error) {
           field.scrollIntoView();
         }
@@ -3554,7 +3593,7 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
     populateProvinceOptions(THAI_PROVINCES);
     populateDistrictOptionsForProvince("");
     loadThailandDistrictData();
-    applyPlatformClass();
+    ensureMobileLayoutClass();
     enableTouchPinchZoomAssist();
     startTouchScrollGuard();
     normalizeFormControlBilingualText();
@@ -3562,11 +3601,11 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
     markMyanmarTextElements();
     startAutoBilingualFormatting();
     window.addEventListener("resize", function () {
-      applyPlatformClass();
+      ensureMobileLayoutClass();
       syncPolicyZoomInteractionState();
     });
     window.addEventListener("orientationchange", function () {
-      applyPlatformClass();
+      ensureMobileLayoutClass();
       syncPolicyZoomInteractionState();
     });
     if (window.visualViewport && typeof window.visualViewport.addEventListener === "function") {
