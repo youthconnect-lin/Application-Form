@@ -1736,11 +1736,8 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       if (!logoFormLink) {
         return;
       }
-      const resolvedUrl = TEMPLATE_WEB_APP_URL || LOCATION_WEB_APP_URL || GAS_URL;
-      if (!resolvedUrl) {
-        return;
-      }
-      logoFormLink.setAttribute("href", resolvedUrl);
+      logoFormLink.setAttribute("href", "https://www.youthconnectthailand.com");
+      logoFormLink.setAttribute("aria-label", "Open Youth Connect Thailand website");
     }
 
     function formatBytesForUi(bytes) {
