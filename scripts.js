@@ -191,6 +191,8 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
           return !!element;
         })
     );
+    const textareaResizeFrameByElement = new WeakMap();
+    const textareaLastHeightByElement = new WeakMap();
     const virtualFormState = Object.create(null);
 
     let currentPage = 0;
@@ -383,6 +385,33 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       setFieldErrorState(field, touched);
     }, 110);
 
+    const debouncedActionVisibilityUpdate = debounce(function () {
+      scheduleActionVisibilityUpdate();
+    }, 140);
+
+    function shouldDeferActionVisibilityUpdate(field) {
+      if (!field) {
+        return false;
+      }
+      const tag = String(field.tagName || "").toUpperCase();
+      if (tag === "TEXTAREA") {
+        return true;
+      }
+      if (tag !== "INPUT") {
+        return false;
+      }
+      const fieldType = String(field.type || "").toLowerCase();
+      return (
+        fieldType === "text" ||
+        fieldType === "search" ||
+        fieldType === "email" ||
+        fieldType === "tel" ||
+        fieldType === "url" ||
+        fieldType === "number" ||
+        fieldType === "password"
+      );
+    }
+
     function getPageFields(pageIndex) {
       return pageFieldCache[pageIndex] || [];
     }
@@ -470,7 +499,6 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
     function restorePageState(pageIndex) {
       getPageFields(pageIndex).forEach(function (field) {
         restoreFieldState(field);
-        syncFilledStateForField(field);
       });
     }
 
@@ -529,6 +557,13 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       if (nextPage.parentNode !== form) {
         form.insertBefore(nextPage, pageInsertBeforeNode);
       }
+
+      getPageFields(pageIndex).forEach(function (field) {
+        syncFilledStateForField(field);
+        if (String(field.tagName || "").toUpperCase() === "TEXTAREA") {
+          autoResizeTextarea(field);
+        }
+      });
 
       activePageElement = nextPage;
     }
@@ -1140,10 +1175,6 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
           return;
         }
         for (const mutation of mutations) {
-          if (mutation.type === "characterData") {
-            scheduleAutoBilingualFormatting();
-            return;
-          }
           if (mutation.type === "childList") {
             if ((mutation.addedNodes && mutation.addedNodes.length) || (mutation.removedNodes && mutation.removedNodes.length)) {
               scheduleAutoBilingualFormatting();
@@ -1153,10 +1184,10 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
         }
       });
 
-      bilingualFormatObserver.observe(document.body, {
+      const observeTarget = form || document.body;
+      bilingualFormatObserver.observe(observeTarget, {
         childList: true,
-        subtree: true,
-        characterData: true
+        subtree: true
       });
     }
 
@@ -1317,8 +1348,30 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
 
     function autoResizeTextarea(textarea) {
       if (!textarea) return;
-      textarea.style.height = "auto";
-      textarea.style.height = String(textarea.scrollHeight) + "px";
+      if (!textarea.isConnected) return;
+      if (textareaResizeFrameByElement.has(textarea)) return;
+
+      const raf =
+        typeof window !== "undefined" && typeof window.requestAnimationFrame === "function"
+          ? window.requestAnimationFrame.bind(window)
+          : function (callback) {
+              return window.setTimeout(callback, 16);
+            };
+
+      const frameToken = raf(function () {
+        textareaResizeFrameByElement.delete(textarea);
+        textarea.style.height = "auto";
+        const nextHeight = textarea.scrollHeight;
+        const previousHeight = textareaLastHeightByElement.get(textarea);
+        if (previousHeight !== nextHeight) {
+          textarea.style.height = String(nextHeight) + "px";
+          textareaLastHeightByElement.set(textarea, nextHeight);
+          return;
+        }
+        textarea.style.height = String(previousHeight || nextHeight || 0) + "px";
+      });
+
+      textareaResizeFrameByElement.set(textarea, frameToken);
     }
 
     function setComputerGroupVisibility(wrapper, show) {
@@ -3673,7 +3726,11 @@ const FALLBACK_GAS_URL = "https://script.google.com/macros/s/AKfycbyrqFTPNwHQddp
       if (field !== reviewConfirmInput && reviewConfirmInput.checked) {
         reviewConfirmInput.checked = false;
       }
-      scheduleActionVisibilityUpdate();
+      if (shouldDeferActionVisibilityUpdate(field)) {
+        debouncedActionVisibilityUpdate();
+      } else {
+        scheduleActionVisibilityUpdate();
+      }
     });
 
     form.addEventListener("focusin", function (event) {
