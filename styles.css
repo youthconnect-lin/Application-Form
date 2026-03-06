@@ -156,9 +156,10 @@ body {
 }
 
 .shell {
-   width: min(100% - 2rem, clamp(720px, 60vw, 1200px));
-   margin-inline: auto;
+  width: 100%;
   /* fluid max width: scales from small to large screens */
+  max-width: clamp(720px, 62vw, 1200px);
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
   gap: 18px;
@@ -552,7 +553,7 @@ body {
 .page-title {
   display: block;
   margin: 0;
-  font-size: var(--fs-page-title-global);
+  font-size: 20px;
   color: #0f3a66;
   line-height: 1.35;
   text-align: left;
@@ -1738,6 +1739,99 @@ label,
   word-break: normal;
 }
 
+/* Apps Script mobile fallback: force mobile layout when browser still reports desktop viewport. */
+.force-mobile {
+  --my-title-line-height: var(--my-title-line-height-mobile);
+  --my-title-pad-top: var(--my-title-pad-top-mobile);
+  --my-title-pad-bottom: var(--my-title-pad-bottom-mobile);
+}
+
+.force-mobile,
+.force-mobile body {
+  overflow-x: hidden;
+  overflow-x: clip;
+  touch-action: auto;
+  overscroll-behavior: auto;
+}
+
+.force-mobile body {
+  padding: 12px 10px 18px;
+  min-height: 100dvh;
+}
+
+.force-mobile .shell {
+  max-width: none;
+  width: 100%;
+  min-height: 100dvh;
+  gap: 12px;
+}
+
+.force-mobile .panel {
+  border-radius: 14px;
+}
+
+.force-mobile .aside,
+.force-mobile .form-wrap {
+  padding: 16px 12px;
+}
+
+.force-mobile .section-card,
+.force-mobile .mode-card,
+.force-mobile .subsection-card,
+.force-mobile .language-block,
+.force-mobile .review-group {
+  padding: 18px;
+}
+
+.force-mobile .wizard-top {
+  padding-inline: 18px;
+}
+
+.force-mobile .review-row {
+  grid-template-columns: 1fr;
+}
+
+.force-mobile #welcomePage .welcome-intro-center,
+.force-mobile #welcomePage .bilingual-copy {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: min(100%, 42rem);
+}
+
+.force-mobile .actions {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.force-mobile .actions .btn {
+  width: 100%;
+  min-width: 0;
+}
+
+.force-mobile .checkbox-grid {
+  grid-template-columns: 1fr;
+}
+
+.force-mobile input,
+.force-mobile select,
+.force-mobile textarea {
+  padding: 16px 13px;
+  min-height: 58px;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.force-mobile input:not([type="checkbox"]):not([type="radio"]):focus,
+.force-mobile select:focus,
+.force-mobile textarea:focus,
+.force-mobile input:not([type="checkbox"]):not([type="radio"]).is-mobile-focused,
+.force-mobile select.is-mobile-focused,
+.force-mobile textarea.is-mobile-focused {
+  border-color: var(--focus-blue);
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.16);
+}
+
 /* ==========================================================================
    14) TABLET (<= 1024px)
    ========================================================================== */
@@ -1949,6 +2043,7 @@ label,
   }
 
   .page-title {
+    font-size: clamp(18px, 5vw, 24px);
     line-height: 1.26;
   }
 
@@ -2179,6 +2274,72 @@ label,
   }
 }
 
+@media (max-width: 1024px), (hover: none) and (pointer: coarse) {
+  html.platform-facebook-browser,
+  html.platform-facebook-browser body {
+    overflow-x: hidden;
+    overflow-x: clip;
+    touch-action: pan-y pinch-zoom;
+    overscroll-behavior-y: auto;
+  }
+
+  html.platform-facebook-browser body {
+    padding: calc(10px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(20px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left));
+    min-height: auto;
+  }
+
+  html.platform-facebook-browser .shell {
+    width: 100%;
+    max-width: none;
+    min-height: auto;
+    gap: 10px;
+  }
+
+  html.platform-facebook-browser .aside {
+    padding: 14px 12px;
+  }
+
+  html.platform-facebook-browser .form-wrap {
+    padding: 14px 12px 18px;
+  }
+
+  html.platform-facebook-browser .brand-header {
+    gap: 8px;
+    margin-bottom: 0;
+  }
+
+  html.platform-facebook-browser .logo-frame {
+    width: 58px;
+    height: 58px;
+  }
+
+  html.platform-facebook-browser .title {
+    font-size: clamp(20px, 5vw, 26px);
+  }
+
+  html.platform-facebook-browser .subtitle {
+    font-size: clamp(12px, 3.5vw, 14px);
+  }
+
+  html.platform-facebook-browser .wizard-top {
+    row-gap: 8px;
+    padding-inline: 12px;
+  }
+
+  html.platform-facebook-browser .section-card,
+  html.platform-facebook-browser .mode-card,
+  html.platform-facebook-browser .subsection-card,
+  html.platform-facebook-browser .language-block,
+  html.platform-facebook-browser .review-group {
+    padding: 13px;
+  }
+
+  html.platform-facebook-browser .form-wrap,
+  html.platform-facebook-browser #policyPage {
+    touch-action: pan-y pinch-zoom;
+  }
+}
+
 /* ==========================================================================
    16) SMALL MOBILE (<= 360px)
    ========================================================================== */
@@ -2279,6 +2440,9 @@ label {
     font-size: clamp(30px, 2.6vw, 40px);
   }
 
+  .page-title {
+    font-size: clamp(22px, 1.6vw, 32px);
+  }
 }
 @supports (text-wrap: balance) {
   .title,
@@ -2313,6 +2477,10 @@ body {
 
 .title {
   font-size: var(--fs-title-global);
+}
+
+.page-title {
+  font-size: var(--fs-page-title-global);
 }
 
 .section-title,
@@ -2388,10 +2556,4 @@ textarea {
 
 @media (min-width: 1400px) {
   :root {
-    --fs-title-global: clamp(28px, 2.2vw, 40px);
-    --fs-page-title-global: clamp(22px, 1.5vw, 30px);
-    --fs-section-title-global: clamp(18px, 1vw, 24px);
-    --fs-body-global: clamp(15px, 0.5vw + 0.72rem, 18px);
-    --fs-btn-global: clamp(16px, 0.8vw + 0.8rem, 20px);
-  }
-}
+    --fs-title-global: clamp(28px, 2.2v
